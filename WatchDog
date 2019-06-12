@@ -1,0 +1,30 @@
+$bootevent = get-eventlog -LogName Application -Message *NECS_TEA.EXE* -Newest 1
+$booteventindex = $bootevent.Index
+
+Write-Output($bootevent)
+
+while($true) {
+
+Start-Sleep(60)
+
+    $recentevent = get-eventlog -LogName Application -Message *NECS_TEA.EXE* -Newest 1
+
+    $lastindex = $recentevent.Index
+
+    if([int]$booteventindex -ne [int]$lastindex){
+    #if time stamps dont match
+            Write-Output($bootevent)
+            Write-Output($recentevent)
+
+            Write-Output("Going For a reboot");
+            #Shutdown /r /f /c "TEA ERROR DETECED REBOOTING"
+
+        }else{
+            Write-Output("No New Error in log");
+        }
+        
+
+        Write-Output("Waiting 60 seconds");
+        Write-Output((get-date).ToString());
+       
+}
