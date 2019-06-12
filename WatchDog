@@ -17,7 +17,7 @@ Start-Sleep(60)
             Write-Output($recentevent)
 
             Write-Output("Going For a reboot");
-            #Shutdown /r /f /c "TEA ERROR DETECED REBOOTING"
+            Shutdown /r /f /c "TEA ERROR DETECED REBOOTING"
 
         }else{
             Write-Output("No New Error in log");
