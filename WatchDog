@@ -1,30 +1,28 @@
-$bootevent = get-eventlog -LogName Application -Message *NECS_TEA.EXE* -Newest 1
-$booteventindex = $bootevent.Index
-
-Write-Output($bootevent)
+Write-Output("Startup Waiting 11 minutes");
+Write-Output((get-date).ToString());
+       
+Start-Sleep(60*10)
 
 while($true) {
 
 Start-Sleep(60)
 
-    $recentevent = get-eventlog -LogName Application -Message *NECS_TEA.EXE* -Newest 1
+    $TSPAN = New-TimeSpan -Start (Get-ChildItem -File -Path \\viking-entree16\NECS_SHARED\WSUpdate\WATCHDOG\WATCHDOG.edf).LastWriteTime -End (GET-DATE)
+    $TSPAN.TotalMinutes
 
-    $lastindex = $recentevent.Index
-
-    if([int]$booteventindex -ne [int]$lastindex){
+    if($TSPAN.TotalMinutes -gt 11){
     #if time stamps dont match
-            Write-Output($bootevent)
-            Write-Output($recentevent)
-
+            Write-Output($TSPAN.TotalMinutes);
             Write-Output("Going For a reboot");
             Shutdown /r /f /t 10 /c "TEA ERROR DETECED REBOOTING"
 
         }else{
-            Write-Output("No New Error in log");
+            Write-Output("File is not old enough");
         }
         
 
         Write-Output("Waiting 60 seconds");
+        Write-Output($TSPAN.TotalMinutes);
         Write-Output((get-date).ToString());
        
 }
